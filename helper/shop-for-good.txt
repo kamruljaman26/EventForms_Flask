@@ -1,0 +1,32 @@
+Title
+About                  Logo
+
+Name*
+
+Email*
+
+Phone Number*
+
+NID/Passport Number*
+
+Date* 
+
+Number of Participant*
+
+Session Time *
+
+Are you agree to wear a musk and maintain social distance while attending in this event? *
+
+------------------------------------------------------------------------------------------------------------------------
+
+Form demo : http://anysol.xyz/form/ 
+            https://docs.google.com/forms/d/e/1FAIpQLSc7kkn--V0ItLPeQ-7lLFNdpveWtelQukaPXYObNfsAmPWb5g/viewform
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+Logic :   30 Seat per Session, so if Session 1 complete 30 seat then this Session will be hide although if 4 Session 
+          filled up then the day will be hide.
+
+N.B : any confusion? then call me
+        

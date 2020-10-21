@@ -1,0 +1,4 @@
+Droplet Server Details:
+159.65.150.236
+ssh root@159.65.150.236
+password : Kamrul1Himel
