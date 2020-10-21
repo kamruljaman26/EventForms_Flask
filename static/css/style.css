@@ -1,0 +1,56 @@
+/* -------------- */
+/* Inside Form */
+.btn-primary {
+    width: 100%;
+}
+
+.sub-info {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.additional-info {
+    font-size: 14px;
+}
+
+
+/* --------------- */
+/* Header Section */
+.header {
+    background-color: white;
+    border-radius: 6px;
+    margin: 20px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.header h2 {
+    color: dodgerblue;
+    font-size: 1.8em;
+}
+
+.header p {
+    color: grey;
+    font-size: 14px;
+}
+
+
+/* ----------- */
+/* Form Body */
+.form-body {
+    border-radius: 6px;
+    background-color: white;
+    padding: 40px;
+    margin-bottom: 30px;
+}
+
+body {
+    /*background-color: ghostwhite;*/
+}
+
+
+/* ------------- */
+/* Make it responsive */
+@media screen and (max-width: 480px) {
+
+}

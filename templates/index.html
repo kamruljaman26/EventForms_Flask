@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+
+<!-- Include Something in Header -->
+{% block hearder %}
+    <title>Shop for Good</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% endblock %}
+
+
+<!-- Inside Body Section -->
+{% block body %}
+    <div class="container">
+        <div class="header shadow-sm">
+            <h2 class="">Shop4Good Garments Sale Event – 4th edition</h2>
+            <p class="header-p">27 & 28 November 2020, from 09.00 am to 06.00 pm <br> @ Embassy of Italy in Dhaka, Plot
+                No 2/3, 79 Rd No 74, Gulshan 2, Dhaka 1212</p>
+        </div>
+
+        <div class="form-body shadow-sm">
+            <!-- Form Section -->
+            <form action="#" class="needs-validation" novalidate>
+
+                <!-- Name the participant -->
+                <div class="form-group">
+                    <label for="name">Name the Participant</label>
+                    <input type="text" class="form-control" id="name" placeholder="Enter username" name="name" required>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                </div>
+
+                <!-- Phone Number -->
+                <div class="form-group">
+                    <label for="phone">Cell Phone Number</label>
+                    <input type="text" class="form-control" id="phone" placeholder="Enter password" name="phone"
+                           required>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" class="form-control" id="email" placeholder="Enter email" name="email" required>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                </div>
+
+                <!-- NID/Passport number -->
+                <div class="form-group">
+                    <label for="passport_no">NID/Passport number</label>
+                    <input type="text" class="form-control" id="passport_no" placeholder="NID/Passport number"
+                           name="passport_no" required>
+                    <div class="invalid-feedback"><span>Please fill out this field.</span></div>
+                </div>
+
+                <!-- Booking date -->
+                <div class="form-group">
+                    <label for="booking_date">Booking date</label>
+                    <select class="form-control" id="booking_date" name="booking_date">
+                        <option value="26">26th November, 2020</option>
+                        <option value="27">27th November,2020</option>
+                    </select>
+                </div>
+
+                <!-- Time slot -->
+                <div class="form-group">
+                    <label for="time_slot">Time Slot</label>
+                    <select class="form-control" name="time_slot" id="time_slot" onclick="checkFunction(this.value)">
+                        <option value="1">Session 1 (10-11AM)</option>
+                        <option value="2">Session 2 (11-12 AM)</option>
+                        <option value="3">Session 3 (12-01 PM)</option>
+                        <option value="4">Session 3 (1-2 PM)</option>
+                    </select>
+                    <div class="shadow-none p-3 mb-3 bg-light rounded sub-info" role="alert">Children from 02 months to 13 years old do not require any registration and they will be allowed
+                        to enter the sale’s premises with their parents, whose registration is mandatory.</div>
+
+                </div>
+
+                <!-- Number of participant -->
+                <div class="form-group">
+                    <label for="total_person">Number of participant</label>
+                    <select class="form-control" name="total_person" id="total_person">
+                        <option value="1">1 Person</option>
+                        <option value="2">2 Person</option>
+                        <option value="3">3 Person</option>
+                        <option value="4">4 Person</option>
+                        <option value="5">5 Person</option>
+                    </select>
+                </div>
+
+                <!-- For safety and security reasons -->
+                <div class="shadow-none p-3 mb-3 bg-light rounded additional-info">
+                    <span>For safety and security reasons –</span>
+                    <ul>
+                        <li>Guests are permitted to enter with only one small bag, size 35 cm x 40 cm x 19 cm. Additional
+                            bags and boxes will be available at the sale.</li>
+                        <li>Please bring with you a valid ID number matching with the one inserted in the
+                            booking system.</li>
+                        <li>It will be mandatory for everyone to wear masks while visiting the garments sale’s
+                            premises.</li>
+                        <li>Hand sanitizers, disposable gloves and shoes disinfectants will be available at the sale.</li>
+                    </ul>
+                    <span>Before the event, you will receive a confirmation email from the sale organizers,
+                        detailing your selected date and time slot. In case you need to further
+                        communicate with us, please email us at <a href="mailto:a.rahman@tdhitaly.org">a.rahman@tdhitaly.org</a>  or call/text us
+                        at +880 1712-227190. </span>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+
+    </div>
+{% endblock %}
+
+
+<!-- Body Foot for include JS file & Script -->
+{% block body_footer %}
+    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+{% endblock %}
