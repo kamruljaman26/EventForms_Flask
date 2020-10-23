@@ -11,21 +11,20 @@
 <!-- Inside Body Section -->
 {% block body %}
     <div class="container">
-        <div class="header shadow-sm">
+        <div class="header card">
             <h2 class="">Shop4Good Garments Sale Event – 4th edition</h2>
             <p class="header-p">27 & 28 November 2020, from 09.00 am to 06.00 pm <br> @ Embassy of Italy in Dhaka, Plot
                 No 2/3, 79 Rd No 74, Gulshan 2, Dhaka 1212</p>
         </div>
 
-        <div class="form-body shadow-sm">
+        <div class="form-body card">
             <!-- Form Section -->
-            <form action="" class="needs-validation" novalidate>
+            <form action="{{ url_for('reg') }}" class="needs-validation" method="post">
 
                 <!-- Name the participant -->
                 <div class="form-group">
                     <label for="name">Name the Participant</label>
                     <input type="text" class="form-control" id="name" placeholder="Enter username" name="name" required>
-                    <div class="invalid-feedback">Please fill out this field.</div>
                 </div>
 
                 <!-- Phone Number -->
@@ -33,14 +32,12 @@
                     <label for="phone">Cell Phone Number</label>
                     <input type="text" class="form-control" id="phone" placeholder="Enter password" name="phone"
                            required>
-                    <div class="invalid-feedback">Please fill out this field.</div>
                 </div>
 
                 <!-- Email -->
                 <div class="form-group">
                     <label for="email">Email Address</label>
                     <input type="email" class="form-control" id="email" placeholder="Enter email" name="email" required>
-                    <div class="invalid-feedback">Please fill out this field.</div>
                 </div>
 
                 <!-- NID/Passport number -->
@@ -48,7 +45,6 @@
                     <label for="passport_no">NID/Passport number</label>
                     <input type="text" class="form-control" id="passport_no" placeholder="NID/Passport number"
                            name="passport_no" required>
-                    <div class="invalid-feedback"><span>Please fill out this field.</span></div>
                 </div>
 
                 <!-- Booking date -->
@@ -117,7 +113,7 @@
                 </div>
 
                 <!-- Submit Button -->
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <input type="submit" class="btn btn-primary" value="Submit">
             </form>
         </div>
     </div>

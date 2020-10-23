@@ -1,8 +1,6 @@
 from datetime import timedelta
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import relationship
-import json
 
 app = Flask(__name__)
 app.secret_key = 'asdfghjkppiuytrewqasdfghjk'  # secret_key session end-to-end encryption
@@ -45,20 +43,22 @@ class User(db.Model):
     __tablename__ = 'user'
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
     name = db.Column(db.String(100), nullable=False)
+    phone = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique=True)
     nid_pas_num = db.Column(db.String(100), nullable=False)
     participant = db.Column(db.Integer, nullable=False)
     session_id = db.Column(db.String(20), db.ForeignKey('session.session_id'))
 
-    def __init__(self, user_id, name, email, nid_pass_num, participant):
-        self.user_id = user_id
+    def __init__(self, name, phone, email, nid_pass_num, participant, session_id):
         self.name = name
+        self.phone = phone
         self.email = email
         self.nid_pas_num = nid_pass_num
         self.participant = participant
+        self.session_id = session_id
 
     def __repr__(self):
-        return f"({self.user_id},{self.name},{self.email},{self.nid_pas_num}," \
+        return f"({self.user_id},{self.name},{self.phone},{self.email},{self.nid_pas_num}," \
                f"{self.participant},{self.session_id})"
 
 
@@ -99,6 +99,26 @@ def index():
         pass
     elif request.method == 'GET':
         return render_template('index.html')
+
+
+# Submit Registration
+@app.route('/reg', methods=['POST', 'GET'])
+def reg():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        phone = request.form.get('phone')
+        email = request.form.get('email')
+        passport_no = request.form.get('passport_no')
+        time_slot = request.form.get('time_slot')
+        total_person = int(request.form.get('total_person'))
+
+        # Create User :    def __init__(self, name, email, nid_pass_num, participant):
+        user = User(name, phone, email, passport_no,total_person, time_slot)
+        session = db.session
+        session.add(user)
+        session.commit()
+
+        return "Hello"
 
 
 # Admin Login
@@ -164,7 +184,8 @@ def convert_to_list(values):
     my_dit['list'] = some
     return some
 
-# Get Session/Time
+
+# Get Session/Time : API
 @app.route('/api/get-slot', methods=['GET'])
 def get_time_slot():
     if 'date' in request.args:
@@ -174,14 +195,7 @@ def get_time_slot():
 
     # Collect data from DB
     time_list = Session.query.filter(Session.session_date.in_([date, ])).all()
-    print(convert_to_list(time_list))
     return jsonify(convert_to_list(time_list))
-
-
-# Create Registration From
-@app.route('/reg')
-def reg():
-    pass
 
 
 # Main Function

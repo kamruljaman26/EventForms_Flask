@@ -27,6 +27,7 @@ let app = new Vue({
     }
 });
 
+
 // Update Session Time & Seat Slot
 function update_time_slot(selected) {
     // on date 26
