@@ -11,11 +11,34 @@
 <!-- Inside Body Section -->
 {% block body %}
     <div class="container">
+        <div class="card">
+            <!-- Alert -->
+            {% if message %}
+                <div class="alert alert-danger" role="alert">
+                    <span>{{ message }}</span>
+                </div>
+            {% endif %}
+
+            <h1>Login</h1>
+            <!-- Login Form -->
+            <form action="{{ url_for('admin') }}" method="post">
+                <div class="form-group">
+                    <label for="email">Email address:</label>
+                    <input type="email" class="form-control" placeholder="Enter email" name="email" id="email">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" class="form-control" placeholder="Enter password" name="password"
+                           id="password">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
     </div>
 {% endblock %}
 
 
 <!-- Body Foot for include JS file & Script -->
 {% block body_footer %}
-{#    <script src="{{ url_for('static', filename='js/home.js') }}"></script>#}
+    {#    <script src="{{ url_for('static', filename='js/index.js') }}"></script>#}
 {% endblock %}
