@@ -1,11 +1,13 @@
 from datetime import timedelta
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
+import json
 
 app = Flask(__name__)
 app.secret_key = 'asdfghjkppiuytrewqasdfghjk'  # secret_key session end-to-end encryption
 app.permanent_session_lifetime = timedelta(days=3)
+app.config["DEBUG"] = True
 
 # SqlAlchemy Database Configuration With Mysql
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://{user}:{password}@{server}/{database}'.format(
@@ -34,11 +36,14 @@ class Admin(db.Model):
         self.phone = phone
         self.password = password
 
+    def __repr__(self):
+        return f"({self.admin_id},{self.name},{self.email},{self.password}"
+
 
 # Registration Form Model Class
 class User(db.Model):
     __tablename__ = 'user'
-    user_id = db.Column(db.Integer, autoincrement=True, primary_key=True,nullable=False)
+    user_id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique=True)
     nid_pas_num = db.Column(db.String(100), nullable=False)
@@ -52,6 +57,10 @@ class User(db.Model):
         self.nid_pas_num = nid_pass_num
         self.participant = participant
 
+    def __repr__(self):
+        return f"({self.user_id},{self.name},{self.email},{self.nid_pas_num}," \
+               f"{self.participant},{self.session_id})"
+
 
 # Session Form Model
 class Session(db.Model):
@@ -61,7 +70,6 @@ class Session(db.Model):
     session_date = db.Column(db.Date, nullable=False)
     session_time = db.Column(db.Time, nullable=False)
     seat_booked = db.Column(db.Integer, nullable=False, default=0)
-    children = relationship("user")
 
     def __init__(self, session_id, session_name, session_date, session_time):
         self.session_id = session_id
@@ -69,11 +77,28 @@ class Session(db.Model):
         self.session_date = session_date
         self.session_time = session_time
 
+    def __repr__(self):
+        return f"({self.session_id},{self.session_name},{self.session_date}, {self.session_time}, {self.seat_booked})"
+
+    def __str__(self):
+        directory = dict(
+            session_id=self.session_id,
+            session_name=self.session_name,
+            session_date=str(self.session_date),
+            session_time=str(self.session_time),
+            seat_booked=self.seat_booked
+        )
+        # my_list = (self.session_id, self.session_name,str(self.session_date),str(self.session_time),self.seat_booked)
+        return directory
+
 
 # Registration Form
-@app.route("/")
+@app.route("/", methods=['POST', 'GET'])
 def index():
-    return render_template('index.html')
+    if request.method == 'POST':
+        pass
+    elif request.method == 'GET':
+        return render_template('index.html')
 
 
 # Admin Login
@@ -84,8 +109,8 @@ def admin():
         password = request.form.get('password')
 
         # Collect data from DB
-        query = db.session.query(Admin.name, Admin.email, Admin.password).filter(Admin.email.in_([email, ]))
-        results = query.all()
+        results = db.session.query(Admin.name, Admin.email, Admin.password) \
+            .filter(Admin.email.in_([email, ])).all()
 
         if results and results[0][2] == password:
             # create session
@@ -117,7 +142,6 @@ def dashboard():
     except:
         return render_template('login.html')
     else:
-        # todo
         return render_template('dashboard.html')
 
 
@@ -129,6 +153,35 @@ def logout():
     session.pop('admin_email', None)
     session.pop('admin_phone', None)
     return redirect(url_for('admin'))
+
+
+# Convert INTO LIST
+def convert_to_list(values):
+    my_dit = {}
+    some = []
+    for x in values:
+        some.append(x.__str__())
+    my_dit['list'] = some
+    return some
+
+# Get Session/Time
+@app.route('/api/get-slot', methods=['GET'])
+def get_time_slot():
+    if 'date' in request.args:
+        date = str(request.args['date'])
+    else:
+        return "Error: No id field provided. Please specify an id."
+
+    # Collect data from DB
+    time_list = Session.query.filter(Session.session_date.in_([date, ])).all()
+    print(convert_to_list(time_list))
+    return jsonify(convert_to_list(time_list))
+
+
+# Create Registration From
+@app.route('/reg')
+def reg():
+    pass
 
 
 # Main Function

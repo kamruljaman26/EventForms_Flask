@@ -19,7 +19,7 @@
 
         <div class="form-body shadow-sm">
             <!-- Form Section -->
-            <form action="#" class="needs-validation" novalidate>
+            <form action="" class="needs-validation" novalidate>
 
                 <!-- Name the participant -->
                 <div class="form-group">
@@ -53,25 +53,32 @@
 
                 <!-- Booking date -->
                 <div class="form-group">
-                    <label for="booking_date">Booking date</label>
-                    <select class="form-control" id="booking_date" name="booking_date">
-                        <option value="26">26th November, 2020</option>
-                        <option value="27">27th November,2020</option>
+                    <label for="session_date">Event Date</label>
+                    <select class="form-control" id="session_date" name="session_date"
+                            onchange="update_time_slot(this.value)">
+                        {#                        <option value="empty">Please Select Event Date</option>#}
+                        <option value="2020-11-26">26th November, 2020</option>
+                        <option value="2020-11-27">27th November,2020</option>
                     </select>
                 </div>
 
                 <!-- Time slot -->
-                <div class="form-group">
-                    <label for="time_slot">Time Slot</label>
-                    <select class="form-control" name="time_slot" id="time_slot" onclick="checkFunction(this.value)">
-                        <option value="1">Session 1 (10-11AM)</option>
-                        <option value="2">Session 2 (11-12 AM)</option>
-                        <option value="3">Session 3 (12-01 PM)</option>
-                        <option value="4">Session 3 (1-2 PM)</option>
-                    </select>
-                    <div class="shadow-none p-3 mb-3 bg-light rounded sub-info" role="alert">Children from 02 months to 13 years old do not require any registration and they will be allowed
-                        to enter the sale’s premises with their parents, whose registration is mandatory.</div>
-
+                <div id="app">
+                    <div class="form-group">
+                        <label for="time_slot">Time Slot</label>
+                        <select class="form-control" name="time_slot" id="time_slot">
+                            <!--Set List Dynamically -->
+                            <option value="empty">Please Select Time Slot</option>
+                            <option v-for="session in list" v-bind:value="session.session_id">
+                                [[ process_date(session) ]]
+                            </option>
+                        </select>
+                        <div class="shadow-none p-3 mb-3 bg-light rounded sub-info" role="alert">Children from 02 months
+                            to
+                            13 years old do not require any registration and they will be allowed
+                            to enter the sale’s premises with their parents, whose registration is mandatory.
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Number of participant -->
@@ -88,15 +95,20 @@
 
                 <!-- For safety and security reasons -->
                 <div class="shadow-none p-3 mb-3 bg-light rounded additional-info">
-                    <span>For safety and security reasons –</span>
+                    <span><b>For safety and security reasons –</b></span>
                     <ul>
-                        <li>Guests are permitted to enter with only one small bag, size 35 cm x 40 cm x 19 cm. Additional
-                            bags and boxes will be available at the sale.</li>
+                        <li>Guests are permitted to enter with only one small bag, size 35 cm x 40 cm x 19 cm.
+                            Additional
+                            bags and boxes will be available at the sale.
+                        </li>
                         <li>Please bring with you a valid ID number matching with the one inserted in the
-                            booking system.</li>
+                            booking system.
+                        </li>
                         <li>It will be mandatory for everyone to wear masks while visiting the garments sale’s
-                            premises.</li>
-                        <li>Hand sanitizers, disposable gloves and shoes disinfectants will be available at the sale.</li>
+                            premises.
+                        </li>
+                        <li>Hand sanitizers, disposable gloves and shoes disinfectants will be available at the sale.
+                        </li>
                     </ul>
                     <span>Before the event, you will receive a confirmation email from the sale organizers,
                         detailing your selected date and time slot. In case you need to further
@@ -108,7 +120,6 @@
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
-
     </div>
 {% endblock %}
 
