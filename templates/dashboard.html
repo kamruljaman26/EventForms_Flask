@@ -36,14 +36,46 @@
 
     <!-- Body Section -->
     <div class="container">
+        <div class="row myrow">
 
-        <h1>Okay I love you</h1>
+            {% if is_delete %}
+                <div class="alert alert-secondary" role="alert">
+                    {{ message }}
+                </div>
+            {% endif %}
+
+            {#      Download Button      #}
+            <div class="col-sm card">
+                <h4>Download Excel</h4>
+                <div class="alert alert-success" role="alert">
+                    You can download all data as a Excel file.
+                </div>
+                <form action="{{ url_for('download_excel') }}" method="post">
+                    <input type="submit" value="Download" class="btn btn-success">
+                </form>
+            </div>
+
+            {#      Delete Button      #}
+            <div class="col-sm card">
+                <h4>Delete Data</h4>
+                <div class="alert alert-danger" role="alert">
+                    This will remove all data from database, be careful!
+                </div>
+{#                <form action="{{ url_for('delete_user_data') }}" method="post">#}
+                <form action="#" method="post">
+                    <input type="submit" value="Delete" class="btn btn-danger">
+                </form>
+            </div>
+
+        </div>
     </div>
-
 {% endblock %}
-
 
 <!-- Body Foot for include JS file & Script -->
 {% block body_footer %}
-    {#    <script src="{{ url_for('static', filename='js/index.js') }}"></script>#}
+    <script>
+        function delete_confirmation() {
+
+        }
+    </script>
 {% endblock %}

@@ -1,11 +1,16 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request
+from flask import redirect, url_for, session, jsonify, send_file
 from flask_sqlalchemy import SQLAlchemy
-from datetime import timedelta
+from datetime import timedelta, time
+import xlsxwriter
+import os
+
 
 app = Flask(__name__)
 app.secret_key = 'asdfghjkppiuytrewqasdfghjk'  # secret_key session end-to-end encryption
 app.permanent_session_lifetime = timedelta(days=3)
 app.config["DEBUG"] = True
+
 
 # SqlAlchemy Database Configuration With Mysql
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://{user}:{password}@{server}/{database}'.format(
@@ -92,6 +97,46 @@ class Session(db.Model):
         return directory
 
 
+# Create Excel File
+def create_excel_file():
+    THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+    my_file = os.path.join(THIS_FOLDER, 'static/pdf/UserData.xlsx')
+
+    workbook = xlsxwriter.Workbook(my_file)
+
+    # Sheet1, Sheet2 etc., but we can also specify a name.
+    worksheet = workbook.add_worksheet("User Data")
+
+    # Start from the first cell. Rows and
+    row = 0
+    col = 0
+
+    # Add Header
+    worksheet.write(0, col, 'Name')
+    worksheet.write(0, col + 1, 'Phone Numer')
+    worksheet.write(0, col + 2, 'Email Address')
+    worksheet.write(0, col + 3, 'NID/Pass')
+    worksheet.write(0, col + 4, 'Total Participant')
+    worksheet.write(0, col + 5, 'Session ID')
+
+    # Update Row
+    row += 1
+
+    # Collect Data From DB
+    result = db.session.query(User).all()
+
+    for user in result:
+        worksheet.write(row, col, user.name)
+        worksheet.write(row, col + 1, user.phone)
+        worksheet.write(row, col + 2, user.email)
+        worksheet.write(row, col + 3, user.nid_pas_num)
+        worksheet.write(row, col + 4, user.participant)
+        worksheet.write(row, col + 5, user.session_id)
+        row += 1
+
+    workbook.close()
+
+
 # Registration Form
 @app.route("/", methods=['POST', 'GET'])
 def index():
@@ -170,18 +215,30 @@ def admin():
 
 
 # Admin Dashboard
-@app.route('/dashboard')
+@app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
-    try:
-        if not session['admin_email']:
-            return redirect(url_for('admin'))
-    except:
-        return render_template('login.html')
-    else:
-        return render_template('dashboard.html')
+    if request.method == 'GET':
+        try:
+            if not session['admin_email']:
+                return redirect(url_for('admin'))
+        except:
+            return render_template('login.html')
+        else:
+            create_excel_file()
+            return render_template('dashboard.html')
+    elif request.method == 'POST':
+        try:
+            num_rows_deleted = db.session.query(User).delete()
+            print(num_rows_deleted)
+            db.session.commit()
+            return render_template('dashboard.html', is_delete=True, message=message)
+        except Exception as e:
+            db.session.rollback()
+            message = 'Something error!'
+            return render_template('dashboard.html', is_delete=True, message=message)
 
 
-# Log out
+    # Log out
 @app.route('/logout')
 def logout():
     # Delete session data
@@ -212,6 +269,20 @@ def get_time_slot():
     # Collect data from DB
     time_list = Session.query.filter(Session.session_date.in_([date, ])).all()
     return jsonify(convert_to_list(time_list))
+
+
+# Download PDF List
+@app.route('/api/download-excel', methods=['POST'])
+def download_excel():
+    path = 'static/pdf/UserData.xlsx'
+    return send_file(path, as_attachment=True)
+
+
+# Delete All User Data
+@app.route('/api/delete-user-data', methods=['POST'])
+def delete_user_data():
+    pass
+
 
 # Main Function
 if __name__ == "__main__":
