@@ -12,14 +12,29 @@
 {% block body %}
     <div class="container">
         <div class="header card">
-            <h2 class="">Shop4Good Garments Sale Event – 4th edition</h2>
-            <p class="header-p">27 & 28 November 2020, from 09.00 am to 06.00 pm <br> @ Embassy of Italy in Dhaka, Plot
-                No 2/3, 79 Rd No 74, Gulshan 2, Dhaka 1212</p>
+            <div class="row no-gutters">
+                <div class="col-sm-2 no-gutters">
+                    <img class="logo-img" src="{{ url_for('static',filename='img/clogo.jpeg') }}" alt="">
+                </div>
+
+                <div class="col-sm-10 no-gutters">
+                    <h2 class="">Shop4Good Garments Sale Event – 4th edition</h2>
+                    <p class="header-p">27 & 28 November 2020, from 09.00 am to 06.00 pm <br> @ Embassy of Italy in Dhaka, Plot No 2/3, 79 Rd No 74, Gulshan 2, Dhaka 1212</p>
+                </div>
+            </div>
         </div>
+
+        <!-- Error Alert -->
+        {% if err_alert %}
+            <div class="alert alert-danger" role="alert">
+                {{ err_message }}
+            </div>
+        {% endif %}
+
 
         <div class="form-body card">
             <!-- Form Section -->
-            <form action="{{ url_for('reg') }}" class="needs-validation" method="post">
+            <form action="{{ url_for('index') }}" class="needs-validation" method="post">
 
                 <!-- Name the participant -->
                 <div class="form-group">
@@ -47,37 +62,32 @@
                            name="passport_no" required>
                 </div>
 
-                <!-- vue component -->
-                <div id="app">
-                    <!-- Booking date -->
-                    <div class="form-group">
-                        <label for="session_date">Event Date</label>
-                        <select v-model="date_selected" class="form-control" id="session_date" name="session_date"
-                                onchange="update_time_slot(this.value)">
-                            <option value="null">Select date</option>
-                            <option value="2020-11-26">26th November, 2020</option>
-                            <option value="2020-11-27">27th November, 2020</option>
-                        </select>
-                    </div>
+                <!-- Booking date -->
+                <div class="form-group">
+                    <label for="session_date">Event Date</label>
+                    <select v-model="date_selected" class="form-control" id="session_date" name="session_date"
+                            onchange="update_time_slot(this.value)">
+                        <option value="null">Select event date</option>
+                        <option value="2020-11-26">26th November, 2020</option>
+                        <option value="2020-11-27">27th November, 2020</option>
+                    </select>
+                </div>
 
-                    <!-- Time slot -->
+                <!-- Time slot -->
 
-                    <div class="form-group">
-                        <label for="time_slot">Time Slot</label>
+                <div class="form-group">
+                    <label for="time_slot">Time Slot</label>
 
-                        <select class="form-control" name="time_slot" id="time_slot">
-                            <!--Set List Dynamically -->
-                            <option value="empty">Please Select Time Slot</option>
-                            <option v-for="session in list" v-bind:value="session.session_id">
-                                [[ process_date(session) ]]
-                            </option>
-                        </select>
+                    <select class="form-control" name="time_slot" id="time_slot"
+                            onchange="update_participant(this.value)">
+                        <!--Set List Dynamically -->
+                        <option value="null">Please first select event date</option>
+                    </select>
 
-                        <div class="shadow-none p-3 mb-3 bg-light rounded sub-info" role="alert">Children from 02 months
-                            to
-                            13 years old do not require any registration and they will be allowed
-                            to enter the sale’s premises with their parents, whose registration is mandatory.
-                        </div>
+                    <div class="shadow-none p-3 mb-3 bg-light rounded sub-info" role="alert">Children from 02 months
+                        to
+                        13 years old do not require any registration and they will be allowed
+                        to enter the sale’s premises with their parents, whose registration is mandatory.
                     </div>
                 </div>
 
@@ -117,7 +127,7 @@
                 </div>
 
                 <!-- Submit Button -->
-                <input type="submit" class="btn btn-primary" value="Submit">
+                <input type="submit" class="submit-bn btn btn-primary" value="Submit">
             </form>
         </div>
     </div>

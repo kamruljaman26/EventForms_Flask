@@ -10,31 +10,36 @@
 
 <!-- Inside Body Section -->
 {% block body %}
-            <!-- Navigaion Bar -->
-        <nav class="navbar navbar-expand-md bg-light navbar-light">
-            <!-- Logo TXT -->
-            <a class="navbar-brand" href="/">Shop4Good</a>
 
-            <!-- Toggler/collapsibe Button -->
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <!-- Navigaion Bar -->
+    <nav class="navbar navbar-expand-md bg-light navbar-light">
+        <!-- Logo TXT -->
+        <a class="navbar-brand" href="/">Shop4Good</a>
 
-            <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                <!-- Right Side -->
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link">Welcome, {{ session['admin_name'] }}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+        <!-- Toggler/collapsibe Button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <!-- Right Side -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link">Welcome, {{ session['admin_name'] }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Body Section -->
     <div class="container">
+
         <h1>Okay I love you</h1>
     </div>
+
 {% endblock %}
 
 

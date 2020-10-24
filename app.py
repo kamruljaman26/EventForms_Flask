@@ -1,7 +1,5 @@
-from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import update
 from datetime import timedelta
 
 app = Flask(__name__)
@@ -98,37 +96,45 @@ class Session(db.Model):
 @app.route("/", methods=['POST', 'GET'])
 def index():
     if request.method == 'POST':
-        pass
+        global message
+        if request.method == 'POST':
+            name = request.form.get('name')
+            phone = request.form.get('phone')
+            email = request.form.get('email')
+            passport_no = request.form.get('passport_no')
+            total_person = int(request.form.get('total_person'))
+            time_slot = request.form.get('time_slot')
+
+            try:
+                user = User(name, phone, email, passport_no, total_person, time_slot)
+                session = db.session
+                session.add(user)
+                session.commit()
+                print(time_slot)
+
+                # Update data in Session
+                sec_session = Session.query.filter_by(session_id=time_slot).first()
+                sec_session.seat_booked = sec_session.seat_booked + total_person
+                session.commit()
+
+                return render_template('successful.html')
+            except Exception as e:
+                if phone in e.__str__():
+                    message = phone + " this phone number already used for registration," \
+                                      " please try with different phone number."
+
+                if email in e.__str__():
+                    message = email + " this email address already used for registration," \
+                                      " please try with different email address."
+
+                if phone in e.__str__():
+                    message = passport_no + " this Passport/NID number already used for registration," \
+                                            " please try with different Passport/NID number."
+
+                return render_template('index.html', err_alert=True, err_message=message)
+
     elif request.method == 'GET':
         return render_template('index.html')
-
-
-# Submit Registration
-@app.route('/reg', methods=['POST', 'GET'])
-def reg():
-    if request.method == 'POST':
-        name = request.form.get('name')
-        phone = request.form.get('phone')
-        email = request.form.get('email')
-        passport_no = request.form.get('passport_no')
-        total_person = int(request.form.get('total_person'))
-        time_slot = request.form.get('time_slot')
-
-        try:
-            user = User(name, phone, email, passport_no, total_person, time_slot)
-            session = db.session
-            session.add(user)
-            session.commit()
-            print(time_slot)
-
-            # Update data in Session
-            sec_session = Session.query.filter_by(session_id=time_slot).first()
-            sec_session.seat_booked = sec_session.seat_booked + total_person
-            session.commit()
-
-            return 'Registration Successful'
-        except Exception as e:
-            return jsonify(e.__str__())
 
 
 # Admin Login
@@ -206,7 +212,6 @@ def get_time_slot():
     # Collect data from DB
     time_list = Session.query.filter(Session.session_date.in_([date, ])).all()
     return jsonify(convert_to_list(time_list))
-
 
 # Main Function
 if __name__ == "__main__":
