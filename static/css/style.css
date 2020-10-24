@@ -4,6 +4,10 @@
     width: 100%;
 }
 
+.card{
+    padding: 40px;
+}
+
 .sub-info {
     margin-top: 20px;
     font-size: 14px;
@@ -12,7 +16,6 @@
 .additional-info {
     font-size: 14px;
 }
-
 
 /* --------------- */
 /* Header Section */

@@ -1,6 +1,8 @@
-from datetime import timedelta
+from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import update
+from datetime import timedelta
 
 app = Flask(__name__)
 app.secret_key = 'asdfghjkppiuytrewqasdfghjk'  # secret_key session end-to-end encryption
@@ -25,7 +27,7 @@ class Admin(db.Model):
     __tablename__ = 'admin'
     admin_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=False, unique=True)
     password = db.Column(db.String(100), nullable=False)
 
     def __init__(self, name, email, phone, password):
@@ -43,9 +45,9 @@ class User(db.Model):
     __tablename__ = 'user'
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
     name = db.Column(db.String(100), nullable=False)
-    phone = db.Column(db.String(100), nullable=False)
+    phone = db.Column(db.String(100), nullable=False, unique=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
-    nid_pas_num = db.Column(db.String(100), nullable=False)
+    nid_pas_num = db.Column(db.String(100), nullable=False, unique=True)
     participant = db.Column(db.Integer, nullable=False)
     session_id = db.Column(db.String(20), db.ForeignKey('session.session_id'))
 
@@ -109,16 +111,24 @@ def reg():
         phone = request.form.get('phone')
         email = request.form.get('email')
         passport_no = request.form.get('passport_no')
-        time_slot = request.form.get('time_slot')
         total_person = int(request.form.get('total_person'))
+        time_slot = request.form.get('time_slot')
 
-        # Create User :    def __init__(self, name, email, nid_pass_num, participant):
-        user = User(name, phone, email, passport_no,total_person, time_slot)
-        session = db.session
-        session.add(user)
-        session.commit()
+        try:
+            user = User(name, phone, email, passport_no, total_person, time_slot)
+            session = db.session
+            session.add(user)
+            session.commit()
+            print(time_slot)
 
-        return "Hello"
+            # Update data in Session
+            sec_session = Session.query.filter_by(session_id=time_slot).first()
+            sec_session.seat_booked = sec_session.seat_booked + total_person
+            session.commit()
+
+            return 'Registration Successful'
+        except Exception as e:
+            return jsonify(e.__str__())
 
 
 # Admin Login

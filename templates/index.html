@@ -47,21 +47,24 @@
                            name="passport_no" required>
                 </div>
 
-                <!-- Booking date -->
-                <div class="form-group">
-                    <label for="session_date">Event Date</label>
-                    <select class="form-control" id="session_date" name="session_date"
-                            onchange="update_time_slot(this.value)">
-                        {#                        <option value="empty">Please Select Event Date</option>#}
-                        <option value="2020-11-26">26th November, 2020</option>
-                        <option value="2020-11-27">27th November,2020</option>
-                    </select>
-                </div>
-
-                <!-- Time slot -->
+                <!-- vue component -->
                 <div id="app">
+                    <!-- Booking date -->
+                    <div class="form-group">
+                        <label for="session_date">Event Date</label>
+                        <select v-model="date_selected" class="form-control" id="session_date" name="session_date"
+                                onchange="update_time_slot(this.value)">
+                            <option value="null">Select date</option>
+                            <option value="2020-11-26">26th November, 2020</option>
+                            <option value="2020-11-27">27th November, 2020</option>
+                        </select>
+                    </div>
+
+                    <!-- Time slot -->
+
                     <div class="form-group">
                         <label for="time_slot">Time Slot</label>
+
                         <select class="form-control" name="time_slot" id="time_slot">
                             <!--Set List Dynamically -->
                             <option value="empty">Please Select Time Slot</option>
@@ -69,6 +72,7 @@
                                 [[ process_date(session) ]]
                             </option>
                         </select>
+
                         <div class="shadow-none p-3 mb-3 bg-light rounded sub-info" role="alert">Children from 02 months
                             to
                             13 years old do not require any registration and they will be allowed
