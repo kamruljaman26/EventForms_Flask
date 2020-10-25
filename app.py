@@ -15,7 +15,7 @@ app.config["DEBUG"] = True
 # SqlAlchemy Database Configuration With Mysql
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://{user}:{password}@{server}/{database}'.format(
     user='root',
-    password='JAMANkamrul1@',
+    password='Kamrul1Himel',
     server='localhost',
     database='eventforms'
 )
